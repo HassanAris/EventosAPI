@@ -1,4 +1,5 @@
-﻿using EventosAPI.Models;
+﻿using EventosAPI.DTOs;
+using EventosAPI.Models;
 using EventosAPI.Repositories;
 using Microsoft.AspNetCore.Identity; // Adicione a referência ao namespace Identity
 
@@ -46,6 +47,13 @@ namespace EventosAPI.Services
             return usuario;
         }
 
+        public async Task<Tuple<EventoDTO, List<UsuarioEventoDTO>>> ListarUsuariosPorEvento(int id)
+        {
+            var usuario = await _repository.ListarUsuariosPorEvento(id);
+
+            return usuario;
+        }
+
 
         public async Task<TbUsuario?> GetUsuarioByEmail(string email)
         {
@@ -58,5 +66,9 @@ namespace EventosAPI.Services
             return usuario;
         }
 
+        public async Task<IEnumerable<TbUsuario>> GetAllUsuario()
+        {
+            return await _repository.GetAllUsuario();
+        }
     }
 }

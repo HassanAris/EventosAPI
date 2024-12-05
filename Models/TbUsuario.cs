@@ -1,20 +1,31 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
 
-public class TbUsuario
+namespace EventosAPI.Models;
+
+public partial class TbUsuario
 {
     public int Id { get; set; }
 
-    [StringLength(100)]
-    public string Nome { get; set; }
+    public string Nome { get; set; } = null!;
 
-    [Required]
-    [EmailAddress]
-    [StringLength(100)]
-    public string Email { get; set; }
+    public string Email { get; set; } = null!;
 
-    [Required]
-    [StringLength(255)]
-    public string Senha { get; set; }
+    public string Senha { get; set; } = null!;
 
-    public DateTime DataCriacao { get; set; }
+    public DateTime? DataCriacao { get; set; }
+
+    public string Tipo { get; set; } = null!;
+
+    public int? InstituicaoId { get; set; }
+
+    //public virtual TbInstituicao? Instituicao { get; set; }
+
+    //public virtual ICollection<TbEvento> TbEventos { get; set; } = new List<TbEvento>();
+
+    //public virtual ICollection<TbMembroEquipe> TbMembroEquipes { get; set; } = new List<TbMembroEquipe>();
+
+    //public virtual ICollection<TbNotificacao> TbNotificacaos { get; set; } = new List<TbNotificacao>();
+
+    //public virtual ICollection<TbParticipante> TbParticipantes { get; set; } = new List<TbParticipante>();
 }

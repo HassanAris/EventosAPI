@@ -1,10 +1,13 @@
-﻿using EventosAPI.Models;
+﻿using EventosAPI.DTOs;
+using EventosAPI.Models;
 
 public interface IEventoRepository
 {
-    Task<TbEvento> CriarEvento(TbEvento evento);
+    Task<bool> CriarEvento(CriarEventoDTO dto, int userId);
     Task<IEnumerable<TbEvento>> ObterEventos();
     Task<TbEvento> ObterEventoPorId(int id);
     Task AtualizarEvento(TbEvento evento);
-    Task DeletarEvento(int id);
+    Task<bool> DeletarEvento(int id);
+    Task<bool> AceitarOuRecusarEvento(int eventoId, int usuarioId, string status);
+    Task<List<TbEvento>> ListarEventosPorUsuario(int usuarioId);
 }

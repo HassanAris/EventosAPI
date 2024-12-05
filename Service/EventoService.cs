@@ -1,4 +1,7 @@
-﻿using EventosAPI.Models;
+﻿using EventosAPI.DTOs;
+using EventosAPI.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 public class EventoService
 {
@@ -9,14 +12,20 @@ public class EventoService
         _eventoRepository = eventoRepository;
     }
 
-    public async Task<TbEvento> CriarEvento(TbEvento evento)
+    public async Task<bool> CriarEvento(CriarEventoDTO dto, int userId)
     {
-        return await _eventoRepository.CriarEvento(evento);
+        var resultado = await _eventoRepository.CriarEvento(dto, userId);
+        return resultado;
     }
 
     public async Task<IEnumerable<TbEvento>> ObterEventos()
     {
         return await _eventoRepository.ObterEventos();
+    }
+
+    public async Task<List<TbEvento>> ListarEventosPorUsuario(int usuarioId)
+    {
+        return await _eventoRepository.ListarEventosPorUsuario(usuarioId);
     }
 
     public async Task<TbEvento> ObterEventoPorId(int id)
@@ -32,5 +41,10 @@ public class EventoService
     public async Task DeletarEvento(int id)
     {
         await _eventoRepository.DeletarEvento(id);
+    }
+
+    public async Task<bool> AceitarOuRecusarEvento(int eventoId, int usuarioId, string status)
+    {
+       return await _eventoRepository.AceitarOuRecusarEvento(eventoId, usuarioId, status);
     }
 }

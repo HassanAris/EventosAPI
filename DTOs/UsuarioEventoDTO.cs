@@ -1,0 +1,10 @@
+﻿namespace EventosAPI.DTOs
+{
+    public class UsuarioEventoDTO
+    {
+        public int Id { get; set; }
+        public string Nome{ get; set; }
+        public string StatusParticipacao { get; set; }
+
+    }
+}

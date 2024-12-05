@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using BCrypt.Net;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
+using EventosAPI.DTOs;
 
 namespace EventosAPI.Controllers
 {
@@ -34,7 +35,7 @@ namespace EventosAPI.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] TbUsuario usuario)
+        public async Task<IActionResult> Login([FromBody] LoginUsuarioDTO usuario)
         {
             var usuarios = await _usuarioService.Login(usuario.Email, usuario.Senha);
 
@@ -49,7 +50,7 @@ namespace EventosAPI.Controllers
 
         }
 
-        [HttpPost("ConsultaUser")]
+        [HttpGet("ConsultaUser")]
         public async Task<IActionResult> ConsultaUser([FromBody] TbUsuario usuario)
         {
             var usuarios = await _usuarioService.Login(usuario.Email, usuario.Senha);
@@ -63,7 +64,6 @@ namespace EventosAPI.Controllers
             return Ok(new { message = "Login realizado com sucesso!" });
 
         }
-
 
         [HttpPost("GerarToken")]
         public async Task<IActionResult> GerarToken(string email)
@@ -85,7 +85,26 @@ namespace EventosAPI.Controllers
 
         }
 
+        [HttpGet("ObterUsuarios")]
+        public async Task<IActionResult> ObterUsuarios()
+        {
+            var usuarios = await _usuarioService.GetAllUsuario();
 
+            if (usuarios == null) return NotFound();
+
+            return Ok(usuarios);
+
+        }
+
+        [HttpGet("ListarUsuariosPorEvento/{id}")]
+        public async Task<IActionResult> ListarUsuariosPorEvento(int id)
+        {
+            var usuarios = await _usuarioService.ListarUsuariosPorEvento(id);
+
+            if (usuarios == null) return NotFound();
+            return Ok(usuarios);
+
+        }
 
 
     }

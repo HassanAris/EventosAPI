@@ -13,4 +13,6 @@ public class ApplicationDbContext : DbContext
     }
     public DbSet<TbUsuario> tbUsuario { get; set; }
     public DbSet<TbEvento> tbEvento { get; set; }
+    public DbSet<TbParticipante> TbParticipante { get; set; }
+
 }

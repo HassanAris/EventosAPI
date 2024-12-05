@@ -1,4 +1,5 @@
-﻿using EventosAPI.Models;
+﻿using EventosAPI.DTOs;
+using EventosAPI.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -17,18 +18,38 @@ public class EventosController : ControllerBase
 
 
     [HttpPost("CriarEvento")]
-    public async Task<IActionResult> CriarEvento([FromBody] TbEvento evento)
+    public async Task<IActionResult> CriarEvento([FromBody] CriarEventoDTO dto)
     {
-        var userId = Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier)); // Pega o ID do usuário logado
-        evento.OrganizadorId = userId;
-        var novoEvento = await _eventoService.CriarEvento(evento);
-        return CreatedAtAction(nameof(ObterEventoPorId), new { id = novoEvento.Id }, novoEvento);
+        var userId = Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+        if (userId == null)
+        {
+            return Unauthorized();
+        }
+        var resultado = await _eventoService.CriarEvento(dto, userId);
+
+        if (resultado)
+        {
+            return Ok();
+        }
+
+        return BadRequest("Erro ao criar evento.");
     }
+
 
     [HttpGet("ObterEventos")]
     public async Task<IActionResult> ObterEventos()
     {
         var eventos = await _eventoService.ObterEventos();
+        return Ok(eventos);
+    }
+
+    [HttpGet("ObterEventosUsuario")]
+    public async Task<IActionResult> ObterEventosUsuario(int id)
+    {
+        var userId = Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+        var eventos = await _eventoService.ListarEventosPorUsuario(userId);
         return Ok(eventos);
     }
 
@@ -54,4 +75,36 @@ public class EventosController : ControllerBase
         await _eventoService.DeletarEvento(id);
         return NoContent();
     }
+
+    [HttpPost("AceitarOuRecusarEvento/{id}")]
+    public async Task<IActionResult> AceitarOuRecusarEvento(int id, [FromQuery] string status)
+    {
+        // Garantir que o usuário esteja autenticado e obter o ID do usuário
+        var userId = Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+        if (userId == 0)
+        {
+            return Unauthorized(new { message = "Usuário não autenticado." });
+        }
+
+        // Verificar o status
+        if (string.IsNullOrEmpty(status) || !(status.Equals("Aceito", StringComparison.OrdinalIgnoreCase) || status.Equals("Recusado", StringComparison.OrdinalIgnoreCase)))
+        {
+            return BadRequest(new { message = "Status inválido. Use 'Aceito' ou 'Recusado'." });
+        }
+
+        // Chamar o serviço para aceitar ou recusar o evento
+        bool sucesso = await _eventoService.AceitarOuRecusarEvento(id, userId, status);
+
+        if (sucesso)
+        {
+            return Ok(new { message = "Evento atualizado com sucesso!" });
+        }
+        else
+        {
+            return BadRequest(new { message = "Falha ao atualizar o evento." });
+        }
+    }
+
+
 }
