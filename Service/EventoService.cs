@@ -18,6 +18,12 @@ public class EventoService
         return resultado;
     }
 
+    public async Task<bool> EditarEvento(CriarEventoDTO dto, int userId)
+    {
+        var resultado = await _eventoRepository.EditarEvento(dto, userId);
+        return resultado;
+    }
+
     public async Task<IEnumerable<TbEvento>> ObterEventos()
     {
         return await _eventoRepository.ObterEventos();

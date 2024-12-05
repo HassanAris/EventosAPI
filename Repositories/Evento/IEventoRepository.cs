@@ -4,6 +4,7 @@ using EventosAPI.Models;
 public interface IEventoRepository
 {
     Task<bool> CriarEvento(CriarEventoDTO dto, int userId);
+    Task<bool> EditarEvento(CriarEventoDTO dto, int userId);
     Task<IEnumerable<TbEvento>> ObterEventos();
     Task<TbEvento> ObterEventoPorId(int id);
     Task AtualizarEvento(TbEvento evento);

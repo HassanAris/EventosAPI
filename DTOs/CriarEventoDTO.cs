@@ -10,6 +10,7 @@ namespace EventosAPI.DTOs
 
     public class EventoDTO
     {
+        public int Id { get; set; }
         public string Titulo { get; set; }  // Título do evento
         public DateTime Data { get; set; }  // Data do evento
         public string Descricao { get; set; }  // Descrição do evento

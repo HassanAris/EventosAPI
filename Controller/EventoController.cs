@@ -69,6 +69,28 @@ public class EventosController : ControllerBase
         return NoContent();
     }
 
+
+    [HttpPost("EditarEvento")]
+    public async Task<IActionResult> EditarEvento([FromBody] CriarEventoDTO dto)
+    {
+        var userId = Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+        if (userId == null)
+        {
+            return Unauthorized();
+        }
+        var resultado = await _eventoService.EditarEvento(dto, userId);
+
+        if (resultado)
+        {
+            return Ok();
+        }
+
+        return BadRequest("Erro ao criar evento.");
+    }
+
+
+
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeletarEvento(int id)
     {

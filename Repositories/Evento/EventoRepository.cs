@@ -48,6 +48,40 @@ public class EventoRepository : IEventoRepository
         }
     }
 
+    public async Task<bool> EditarEvento(CriarEventoDTO dto, int userId)
+    {
+        try
+        {
+            // Converte a lista de usuários para o formato JSON
+            var usuariosJson = JsonConvert.SerializeObject(dto.Usuarios);
+
+            // Parametriza os dados para a stored procedure
+            var parametros = new SqlParameter[]
+            {
+                new SqlParameter("@IdEvento", SqlDbType.Int) { Value = dto.Evento.Id },
+                new SqlParameter("@Titulo", SqlDbType.NVarChar) { Value = dto.Evento.Titulo },
+                new SqlParameter("@Descricao", SqlDbType.NVarChar) { Value = dto.Evento.Descricao },
+                new SqlParameter("@Data", SqlDbType.DateTime) { Value = dto.Evento.Data },
+                new SqlParameter("@Status", SqlDbType.NVarChar) { Value = dto.Evento.Status },
+                new SqlParameter("@Usuarios", SqlDbType.NVarChar) { Value = usuariosJson },
+                new SqlParameter("@OrganizadorId", SqlDbType.Int) { Value = userId }
+            };
+
+            // Executa a stored procedure
+            var resultado = await _context.Database.ExecuteSqlRawAsync(
+                "EXEC EditarEvento @IdEvento, @Titulo, @Descricao, @Data, @Status, @Usuarios, @OrganizadorId", parametros);
+
+            return resultado > 0;
+        }
+        catch (Exception ex)
+        {
+            // Aqui você pode adicionar log de erros
+            Console.WriteLine(ex.Message);
+            return false;
+        }
+    }
+
+
     public async Task<IEnumerable<TbEvento>> ObterEventos()
     {
         return await _context.tbEvento
