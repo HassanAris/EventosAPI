@@ -2,6 +2,8 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using EventosAPI.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
@@ -11,6 +13,12 @@ public class JwtService
     private readonly string _issuer;
     private readonly string _audience;
 
+    private readonly ApplicationDbContext _context;
+
+    public JwtService(ApplicationDbContext context)
+    {
+        _context = context;
+    }
     public JwtService()
     {
         _secretKey = "YqB4a1WxM6Nf7Pv2KdZrQbJ9XsUvTgHc"; // Você pode mover isso para um arquivo de configuração
@@ -45,6 +53,24 @@ public class JwtService
         );
 
         return new JwtSecurityTokenHandler().WriteToken(token);
+    }
+
+    //// Método para adicionar token à lista de tokens revogados
+    //public void RevokeToken(string token)
+    //{
+    //    _context.RevokedTokens.Add(revokedToken);
+    //}
+
+    // Adiciona o token à lista de revogados no banco
+    public async Task RevokeTokenAsync(string token)
+    {
+        var revokedToken = new RevokedToken
+        {
+            Token = token,
+            RevokedAt = DateTime.UtcNow
+        };
+        _context.RevokedTokens.Add(revokedToken);
+        await _context.SaveChangesAsync();
     }
 
 }

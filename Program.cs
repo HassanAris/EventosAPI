@@ -48,6 +48,7 @@ builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<UsuarioService>();
 builder.Services.AddScoped<IEventoRepository, EventoRepository>();
 builder.Services.AddScoped<EventoService>();
+builder.Services.AddScoped<JwtService>();
 
 // Adicionando controllers
 builder.Services.AddControllers();

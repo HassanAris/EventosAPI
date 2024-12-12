@@ -81,11 +81,17 @@ public class EventoRepository : IEventoRepository
         }
     }
 
-
     public async Task<IEnumerable<TbEvento>> ObterEventos()
     {
         return await _context.tbEvento
             .FromSqlInterpolated($"EXEC ObterEventosAposHoje")
+            .ToListAsync();
+    }
+
+    public async Task<IEnumerable<TbEvento>> ObterEventosInativo()
+    {
+        return await _context.tbEvento
+            .FromSqlInterpolated($"EXEC ListarEExcluirEventosInativo")
             .ToListAsync();
     }
 

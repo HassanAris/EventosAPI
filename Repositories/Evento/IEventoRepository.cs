@@ -11,4 +11,5 @@ public interface IEventoRepository
     Task<bool> DeletarEvento(int id);
     Task<bool> AceitarOuRecusarEvento(int eventoId, int usuarioId, string status);
     Task<List<TbEvento>> ListarEventosPorUsuario(int usuarioId);
+    Task<IEnumerable<TbEvento>> ObterEventosInativo();
 }

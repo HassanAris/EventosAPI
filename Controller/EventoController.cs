@@ -1,6 +1,9 @@
-﻿using EventosAPI.DTOs;
+﻿using EventosAPI.Controllers;
+using EventosAPI.DTOs;
 using EventosAPI.Models;
+using EventosAPI.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -44,6 +47,13 @@ public class EventosController : ControllerBase
         return Ok(eventos);
     }
 
+    [HttpGet("ObterEventosInativo")]
+    public async Task<IActionResult> ObterEventosInativo()
+    {
+        var eventos = await _eventoService.ObterEventosInativo();
+        return Ok(eventos);
+    }
+
     [HttpGet("ObterEventosUsuario")]
     public async Task<IActionResult> ObterEventosUsuario(int id)
     {
@@ -69,7 +79,6 @@ public class EventosController : ControllerBase
         return NoContent();
     }
 
-
     [HttpPost("EditarEvento")]
     public async Task<IActionResult> EditarEvento([FromBody] CriarEventoDTO dto)
     {
@@ -88,8 +97,6 @@ public class EventosController : ControllerBase
 
         return BadRequest("Erro ao criar evento.");
     }
-
-
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeletarEvento(int id)
