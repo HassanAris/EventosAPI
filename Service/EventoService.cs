@@ -29,6 +29,11 @@ public class EventoService
         return await _eventoRepository.ObterEventos();
     }
 
+    public async Task<IEnumerable<TbEvento>> ObterEventosInativo()
+    {
+        return await _eventoRepository.ObterEventosInativo();
+    }
+
     public async Task<List<TbEvento>> ListarEventosPorUsuario(int usuarioId)
     {
         return await _eventoRepository.ListarEventosPorUsuario(usuarioId);

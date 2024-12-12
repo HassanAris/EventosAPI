@@ -16,6 +16,7 @@ namespace EventosAPI.Services
             _passwordHasher = new PasswordHasher<TbUsuario>();
         }
 
+
         // Método para registrar um novo usuário
         public async Task<string> Register(TbUsuario usuario)
         {
@@ -54,7 +55,6 @@ namespace EventosAPI.Services
             return usuario;
         }
 
-
         public async Task<TbUsuario?> GetUsuarioByEmail(string email)
         {
             var usuario = await _repository.GetUsuarioByEmail(email);
@@ -70,5 +70,31 @@ namespace EventosAPI.Services
         {
             return await _repository.GetAllUsuario();
         }
+
+        public async Task<TbUsuario?> GetUsuarioById(int Id)
+        {
+            var usuario = await _repository.GetUsuarioById(Id);
+
+            if (usuario == null)
+            {
+                return null;
+            }
+            return usuario;
+        }
+
+        public async Task<List<TbUsuario>> ListarUsuariosPorOrg(int id)
+        {
+            var usuario = await _repository.ListarUsuariosPorOrg(id);
+
+            return usuario;
+        }
+
+        public async Task<bool> AtualizarInstituicaoId(int usuarioIdLogado, string nome, string email)
+        {
+            var usuario = await _repository.AtualizarInstituicaoId(usuarioIdLogado, nome, email);
+
+            return usuario;
+        }
+
     }
 }
